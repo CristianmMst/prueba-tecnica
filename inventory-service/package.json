@@ -1,0 +1,26 @@
+{
+  "name": "inventory-service",
+  "version": "1.0.0",
+  "description": "Inventory Service",
+  "main": "index.js",
+  "scripts": {
+    "build": "pkgroll",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "exports": "./dist/index.js",
+  "packageManager": "pnpm@10.8.1",
+  "devDependencies": {
+    "@types/amqplib": "^0.10.7",
+    "@types/node": "^22.15.21",
+    "pkgroll": "^2.12.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.8"
+  }
+}

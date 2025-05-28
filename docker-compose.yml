@@ -1,0 +1,63 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - order_network
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - "3001:3001"
+    environment:
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - PORT=3001
+    depends_on:
+      - rabbitmq
+    networks:
+      - order_network
+    restart: unless-stopped
+
+  inventory-service:
+    build: ./inventory-service
+    container_name: inventory-service
+    ports:
+      - "3002:3002"
+    environment:
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - PORT=3002
+    depends_on:
+      - rabbitmq
+    networks:
+      - order_network
+    restart: unless-stopped
+
+  delivery-service:
+    build: ./delivery-service
+    container_name: delivery-service
+    ports:
+      - "3003:3003"
+    environment:
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+      - PORT=3003
+    depends_on:
+      - rabbitmq
+    networks:
+      - order_network
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  order_network:
+    driver: bridge
